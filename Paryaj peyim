@@ -1,0 +1,411 @@
+<!-- The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work. -->
+<template>
+<div class="min-h-screen bg-gray-100">
+<!-- Navigation Bar -->
+<nav class="bg-blue-900 text-white shadow-lg fixed w-full z-50">
+<div class="container mx-auto px-4 py-3 flex justify-between items-center">
+<div class="flex items-center">
+<h1 class="text-2xl font-bold text-yellow-400">Paryaj Peyim</h1>
+</div>
+<div class="hidden md:flex items-center space-x-6">
+<a href="#" class="hover:text-yellow-400 transition duration-200 cursor-pointer">Espò</a>
+<a href="#" class="hover:text-yellow-400 transition duration-200 cursor-pointer">An Dirèk</a>
+<a href="#" class="hover:text-yellow-400 transition duration-200 cursor-pointer">Jeu de casino</a>
+<a href="#" class="hover:text-yellow-400 transition duration-200 cursor-pointer">Estatistik</a>
+<a href="#" class="hover:text-yellow-400 transition duration-200 cursor-pointer">Sipò</a>
+</div>
+<div class="flex items-center space-x-4">
+<div class="relative language-dropdown">
+<button @click="toggleLanguage" class="flex items-center space-x-1 hover:text-yellow-400 transition cursor-pointer whitespace-nowrap !rounded-button">
+<i class="fas fa-globe"></i>
+<span>{{ currentLanguage }}</span>
+<i class="fas fa-chevron-down text-xs"></i>
+</button>
+<div v-if="showLanguageDropdown" class="absolute right-0 mt-2 w-40 bg-white text-blue-900 rounded-md shadow-lg py-1 z-10">
+<a href="#" @click="selectLanguage('Français')" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Français</a>
+<a href="#" @click="selectLanguage('Kreyòl')" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">Kreyòl</a>
+<a href="#" @click="selectLanguage('English')" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">English</a>
+</div>
+</div>
+<button @click="showLoginModal = true" class="bg-transparent border border-yellow-400 text-yellow-400 px-4 py-2 rounded-md hover:bg-yellow-400 hover:text-blue-900 transition cursor-pointer whitespace-nowrap !rounded-button">Konekte</button>
+<button @click="showRegisterModal = true" class="bg-yellow-400 text-blue-900 px-4 py-2 rounded-md hover:bg-yellow-500 transition cursor-pointer whitespace-nowrap !rounded-button">Enskri</button>
+</div>
+<div class="md:hidden">
+<button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white cursor-pointer whitespace-nowrap !rounded-button">
+<i class="fas fa-bars text-xl"></i>
+</button>
+</div>
+</div>
+<!-- Mobile Menu -->
+<div v-if="mobileMenuOpen" class="md:hidden bg-blue-800 pb-4">
+<div class="container mx-auto px-4 flex flex-col space-y-3 pt-2">
+<a href="#" class="text-white hover:text-yellow-400 transition py-2 cursor-pointer">Espò</a>
+<a href="#" class="text-white hover:text-yellow-400 transition py-2 cursor-pointer">An Dirèk</a>
+<a href="#" class="text-white hover:text-yellow-400 transition py-2 cursor-pointer">Jeu de casino</a>
+<a href="#" class="text-white hover:text-yellow-400 transition py-2 cursor-pointer">Estatistik</a>
+<a href="#" class="text-white hover:text-yellow-400 transition py-2 cursor-pointer">Sipò</a>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<div class="relative pt-16 overflow-hidden">
+<div class="flex flex-col md:flex-row min-h-[500px]">
+<div class="md:w-1/2 flex flex-col justify-center p-8 md:p-16 bg-gradient-to-r from-blue-900 to-blue-800 text-white z-10">
+<h2 class="text-4xl md:text-5xl font-bold mb-4">Parye sou espò ou pi renmen yo ak jeu de casino</h2>
+<p class="text-xl mb-8">Jwi pi bon kòt yo epi genyen gwo lajan ak Paryaj Peyim, platfòm paryaj espòtif ak jeu de casino sou entènèt ou ka fè konfyans.</p>
+<div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+<button class="bg-yellow-400 text-blue-900 px-6 py-3 rounded-md font-bold hover:bg-yellow-500 transition cursor-pointer whitespace-nowrap !rounded-button">
+Parye kounye a
+</button>
+<button class="bg-transparent border border-white text-white px-6 py-3 rounded-md font-bold hover:bg-white hover:text-blue-900 transition cursor-pointer whitespace-nowrap !rounded-button">
+Dekouvri bonis yo
+</button>
+</div>
+</div>
+<div class="md:w-1/2 relative">
+<img src="https://public.readdy.ai/ai/img_res/db52bd21976969322411be8412575b81.jpg"
+alt="Paris sportifs en ligne"
+class="w-full h-full object-cover object-top absolute inset-0" />
+</div>
+</div>
+</div>
+<!-- Sports Navigation -->
+<div class="bg-white shadow-md">
+<div class="container mx-auto px-4">
+<div class="flex overflow-x-auto py-4 space-x-6 no-scrollbar">
+<button
+v-for="(sport, index) in sports"
+:key="index"
+@click="selectSport(sport.id)"
+:class="['flex items-center space-x-2 px-4 py-2 rounded-md transition whitespace-nowrap cursor-pointer !rounded-button',
+activeSport === sport.id ? 'bg-blue-900 text-white' : 'bg-gray-100 hover:bg-gray-200']">
+<i :class="['fas', sport.icon]"></i>
+<span>{{ sport.name }}</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-8">
+<!-- Live Matches Section -->
+<section class="mb-12">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-2xl font-bold text-blue-900">Paryaj an Dirèk</h2>
+<a href="#" class="text-blue-600 hover:underline cursor-pointer">Wè tout <i class="fas fa-arrow-right ml-1"></i></a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div v-for="(match, index) in liveMatches" :key="index" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+<div class="bg-blue-900 text-white p-3 flex justify-between items-center">
+<div class="flex items-center">
+<span class="inline-block w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+<span>An Dirèk</span>
+</div>
+<span>{{ match.time }}</span>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center">
+<img :src="match.league.logo" alt="League logo" class="w-6 h-6 mr-2" />
+<span class="text-gray-600">{{ match.league.name }}</span>
+</div>
+<span class="text-sm text-gray-500">{{ match.score }}</span>
+</div>
+<div class="flex justify-between items-center mb-6">
+<div class="flex flex-col items-start">
+<span class="font-medium">{{ match.homeTeam }}</span>
+<span class="font-medium mt-2">{{ match.awayTeam }}</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<button class="bg-gray-100 hover:bg-gray-200 py-2 px-3 rounded text-center transition cursor-pointer whitespace-nowrap !rounded-button">
+<div class="text-xs text-gray-600">1</div>
+<div class="font-bold">{{ match.odds.home }}</div>
+</button>
+<button class="bg-gray-100 hover:bg-gray-200 py-2 px-3 rounded text-center transition cursor-pointer whitespace-nowrap !rounded-button">
+<div class="text-xs text-gray-600">X</div>
+<div class="font-bold">{{ match.odds.draw }}</div>
+</button>
+<button class="bg-gray-100 hover:bg-gray-200 py-2 px-3 rounded text-center transition cursor-pointer whitespace-nowrap !rounded-button">
+<div class="text-xs text-gray-600">2</div>
+<div class="font-bold">{{ match.odds.away }}</div>
+</button>
+</div>
+<button class="mt-4 w-full bg-blue-900 text-white py-2 rounded hover:bg-blue-800 transition cursor-pointer whitespace-nowrap !rounded-button">
+Plis paryaj
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Matches Section -->
+<section class="mb-12">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-2xl font-bold text-blue-900">Match k ap vini yo</h2>
+<a href="#" class="text-blue-600 hover:underline cursor-pointer">Wè tout <i class="fas fa-arrow-right ml-1"></i></a>
+</div>
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+<div class="overflow-x-auto">
+<table class="min-w-full">
+<thead>
+<tr class="bg-gray-100 text-gray-600 text-sm">
+<th class="py-3 px-4 text-left">Dat / Lè</th>
+<th class="py-3 px-4 text-left">Evènman</th>
+<th class="py-3 px-4 text-center">1</th>
+<th class="py-3 px-4 text-center">X</th>
+<th class="py-3 px-4 text-center">2</th>
+<th class="py-3 px-4 text-center">Plis</th>
+</tr>
+</thead>
+<tbody>
+<tr v-for="(match, index) in upcomingMatches" :key="index" class="border-t border-gray-200 hover:bg-gray-50">
+<td class="py-4 px-4">
+<div class="text-sm">{{ match.date }}</div>
+<div class="text-xs text-gray-500">{{ match.time }}</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<span>{{ match.homeTeam }}</span>
+<span>{{ match.awayTeam }}</span>
+</div>
+</td>
+<td class="py-4 px-4 text-center">
+<button class="bg-gray-100 hover:bg-gray-200 py-1 px-3 rounded font-bold transition cursor-pointer whitespace-nowrap !rounded-button">
+{{ match.odds.home }}
+</button>
+</td>
+<td class="py-4 px-4 text-center">
+<button class="bg-gray-100 hover:bg-gray-200 py-1 px-3 rounded font-bold transition cursor-pointer whitespace-nowrap !rounded-button">
+{{ match.odds.draw }}
+</button>
+</td>
+<td class="py-4 px-4 text-center">
+<button class="bg-gray-100 hover:bg-gray-200 py-1 px-3 rounded font-bold transition cursor-pointer whitespace-nowrap !rounded-button">
+{{ match.odds.away }}
+</button>
+</td>
+<td class="py-4 px-4 text-center">
+<button class="text-blue-600 hover:text-blue-800 cursor-pointer whitespace-nowrap !rounded-button">
+<i class="fas fa-plus-circle"></i> {{ match.markets }}
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Payment Methods -->
+<section class="mb-12">
+<h2 class="text-2xl font-bold text-blue-900 mb-6">Metòd Peman</h2>
+<div class="bg-white rounded-lg shadow-md p-6">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+<div v-for="(method, index) in paymentMethods" :key="index" class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:border-blue-500 transition">
+<i :class="['text-3xl mb-2', method.icon]"></i>
+<span class="text-sm text-center">{{ method.name }}</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- App Features -->
+<section class="bg-blue-900 text-white py-16">
+<div class="container mx-auto px-4">
+<h2 class="text-3xl font-bold text-center mb-12">Poukisa chwazi Paryaj Peyim?</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+<div class="flex flex-col items-center text-center">
+<div class="bg-blue-800 p-4 rounded-full mb-4">
+<i class="fas fa-bolt text-3xl text-yellow-400"></i>
+</div>
+<h3 class="text-xl font-bold mb-2">Paryaj an tan reyèl</h3>
+<p class="text-blue-100">Parye an dirèk pandan match yo ak kòt ki ajou enstantaneman.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="bg-blue-800 p-4 rounded-full mb-4">
+<i class="fas fa-dice text-3xl text-yellow-400"></i>
+</div>
+<h3 class="text-xl font-bold mb-2">Jeu de casino</h3>
+<p class="text-blue-100">Jwi yon varyete jeu de casino ki eksitan ak chans pou genyen gwo.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="bg-blue-800 p-4 rounded-full mb-4">
+<i class="fas fa-chart-line text-3xl text-yellow-400"></i>
+</div>
+<h3 class="text-xl font-bold mb-2">Estatistik detaye</h3>
+<p class="text-blue-100">Aksede a estatistik detaye pou ede ou pran desizyon paryaj ki pi enfòme.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="bg-blue-800 p-4 rounded-full mb-4">
+<i class="fas fa-lock text-3xl text-yellow-400"></i>
+</div>
+<h3 class="text-xl font-bold mb-2">Peman sekirize</h3>
+<p class="text-blue-100">Tranzaksyon ou yo pwoteje pa dènye teknoloji kriptaj yo.</p>
+</div>
+<div class="flex flex-col items-center text-center">
+<div class="bg-blue-800 p-4 rounded-full mb-4">
+<i class="fas fa-headset text-3xl text-yellow-400"></i>
+</div>
+<h3 class="text-xl font-bold mb-2">Sipò 24/7</h3>
+<p class="text-blue-100">Ekip sipò nou an disponib tout tan pou ede ou.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Download App Section -->
+<section class="py-16 bg-gray-100">
+<div class="container mx-auto px-4">
+<div class="flex flex-col md:flex-row items-center justify-between">
+<div class="md:w-1/2 mb-8 md:mb-0">
+<h2 class="text-3xl font-bold text-blue-900 mb-4">Telechaje aplikasyon mobil nou an</h2>
+<p class="text-lg text-gray-600 mb-6">Parye kèlkeswa kote ou ye ak aplikasyon mobil entwitif nou an. Pwofite fonksyonalite eksklizif ak notifikasyon an tan reyèl.</p>
+<div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+<button class="flex items-center justify-center bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition cursor-pointer whitespace-nowrap !rounded-button">
+<i class="fab fa-apple text-2xl mr-3"></i>
+<div class="text-left">
+<div class="text-xs">Telechaje sou</div>
+<div class="text-sm font-bold">App Store</div>
+</div>
+</button>
+<button class="flex items-center justify-center bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition cursor-pointer whitespace-nowrap !rounded-button">
+<i class="fab fa-google-play text-2xl mr-3"></i>
+<div class="text-left">
+<div class="text-xs">Telechaje sou</div>
+<div class="text-sm font-bold">Google Play</div>
+</div>
+</button>
+</div>
+</div>
+<div class="md:w-1/2 flex justify-center">
+<img src="https://public.readdy.ai/ai/img_res/37f2add97d02fb7574a497b91cbe8110.jpg" alt="Application mobile" class="max-w-full h-auto rounded-lg shadow-xl" />
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-blue-900 text-white pt-12 pb-6">
+<div class="container mx-auto px-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+<div>
+<h3 class="text-xl font-bold mb-4">Paryaj Peyim</h3>
+<p class="text-blue-100 mb-4">Platfòm paryaj espòtif ak jeu de casino sou entènèt ou ka fè konfyans. Parye sou espò ou pi renmen yo epi genyen gwo lajan!</p>
+<div class="flex space-x-4">
+<a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">
+<i class="fab fa-facebook-f"></i>
+</a>
+<a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">
+<i class="fab fa-twitter"></i>
+</a>
+<a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">
+<i class="fab fa-instagram"></i>
+</a>
+<a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">
+<i class="fab fa-youtube"></i>
+</a>
+</div>
+</div>
+<div>
+<h3 class="text-xl font-bold mb-4">Lyen Rapid</h3>
+<ul class="space-y-2">
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Espò</a></li>
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Paryaj an Dirèk</a></li>
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Jeu de casino</a></li>
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Estatistik</a></li>
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Rezilta</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-xl font-bold mb-4">Sipò</h3>
+<ul class="space-y-2">
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">FAQ</a></li>
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Règ yo</a></li>
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Kontak</a></li>
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Jwèt Responsab</a></li>
+<li><a href="#" class="text-blue-100 hover:text-yellow-400 transition cursor-pointer">Kondisyon itilizasyon</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-xl font-bold mb-4">Kontak</h3>
+<ul class="space-y-2">
+<li class="flex items-center">
+<i class="fas fa-envelope mr-2 text-yellow-400"></i>
+<span class="text-blue-100">support@paryajpeyim.com</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-phone-alt mr-2 text-yellow-400"></i>
+<span class="text-blue-100">+509 2940-2023</span>
+</li>
+<li class="flex items-center">
+<i class="fas fa-map-marker-alt mr-2 text-yellow-400"></i>
+<span class="text-blue-100">Port-au-Prince, Haïti</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="border-t border-blue-800 pt-6 mt-6">
+<div class="flex flex-col md:flex-row justify-between items-center">
+<p class="text-blue-100 text-sm mb-4 md:mb-0">© 2025 Paryaj Peyim. Tout dwa rezève.</p>
+<div class="flex items-center space-x-4">
+<i class="fab fa-cc-visa text-2xl text-gray-300"></i>
+<i class="fab fa-cc-mastercard text-2xl text-gray-300"></i>
+<i class="fab fa-paypal text-2xl text-gray-300"></i>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- Login Modal -->
+<div v-if="showLoginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-lg shadow-xl w-full max-w-md relative">
+<button @click="showLoginModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer whitespace-nowrap !rounded-button">
+<i class="fas fa-times"></i>
+</button>
+<div class="p-6">
+<h2 class="text-2xl font-bold text-blue-900 mb-6">Konekte</h2>
+<form @submit.prevent="login">
+<div class="mb-4">
+<label for="email" class="block text-gray-700 mb-2">Imèl</label>
+<input type="email" id="email" v-model="loginForm.email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-none" placeholder="Imèl ou" required />
+</div>
+<div class="mb-6">
+<label for="password" class="block text-gray-700 mb-2">Modpas</label>
+<input type="password" id="password" v-model="loginForm.password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-none" placeholder="Modpas ou" required />
+<a href="#" class="text-sm text-blue-600 hover:underline mt-2 inline-block cursor-pointer">Bliye modpas?</a>
+</div>
+<button type="submit" class="w-full bg-blue-900 text-white py-2 rounded-md hover:bg-blue-800 transition cursor-pointer whitespace-nowrap !rounded-button">
+Konekte
+</button>
+</form>
+<div class="mt-6 text-center">
+<p class="text-gray-600">Ou pa gen yon kont? <a @click="switchToRegister" class="text-blue-600 hover:underline cursor-pointer">Enskri</a></p>
+</div>
+</div>
+</div>
+</div>
+<!-- Register Modal -->
+<div v-if="showRegisterModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+<div class="bg-white rounded-lg shadow-xl w-full max-w-md relative">
+<button @click="showRegisterModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer whitespace-nowrap !rounded-button">
+<i class="fas fa-times"></i>
+</button>
+<div class="p-6">
+<h2 class="text-2xl font-bold text-blue-900 mb-6">Enskri</h2>
+<form @submit.prevent="register">
+<div class="mb-4">
+<label for="fullname" class="block text-gray-700 mb-2">Non konplè</label>
+<input type="text" id="fullname" v-model="registerForm.fullname" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-none" placeholder="Non konplè ou" required />
+</div>
+<div class="mb-4">
+<label for="register-email" class="block text-gray-700 mb-2">Imèl</label>
+<input type="email" id="register-email" v-model="registerForm.email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-none" placeholder="Imèl ou" required />
+</div>
+<div class="mb-4">
+<label for="register-password" class="block text-gray-700 mb-2">Modpas</label>
+<input type="password" id="register-password" v-model="registerForm.password" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-none" placeholder="Kreye yon modpas" required />
+</div>
+<div class="mb-6">
+<label for="confirm-password" class="block text-gray-700 mb-2">Konfime modpas</label>
+<input type="password" id="confirm-password" v-model="registerForm.confirmPassword" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 border-none" placeholder="Konfime modpas ou" required />
+</div>
+<div class="mb-6">
+<label class="flex items-start">
+<input type="checkbox" v-model="registerForm.terms" class="mt-1 mr-2" required />
+<span class="text-sm text-gray-600">Mwen aksepte <a href="#" class="text-blue-600 hover:underline cursor-pointer">kon
